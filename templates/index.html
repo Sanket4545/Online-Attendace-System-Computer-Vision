@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatic Attendance System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* General Styling */
+        body {
+            background-image: url('/static/background.jpg');
+;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .flash-message {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 400;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .download-btn {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .download-btn a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .download-btn a:hover {
+            color: #388e3c;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px auto;
+            max-width: 800px;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            width: 30%;
+            padding: 20px;
+            margin: 5px;
+            text-align: center;
+        }
+
+        .card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .card p {
+            color: #555;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Automatic Attendance System using Computer Vision </h1>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Step 1</h3>
+            <p>Upload the training images of the students. Ensure that each student has at least one clear image.</p>
+        </div>
+        <div class="card">
+            <h3>Step 2</h3>
+            <p>Upload a test image to detect and recognize students from the training images.</p>
+        </div>
+        <div class="card">
+            <h3>Step 3</h3>
+            <p>Click the "Get Attendance" button to generate the attendance report and download it as an Excel file.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-message">
+              {{ messages[0][1] }}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form action="/upload_train" method="POST" enctype="multipart/form-data">
+            <label>Select Training Images:</label>
+            <input type="file" name="train_images" multiple required>
+            <button type="submit">Upload Training Images</button>
+        </form>
+
+        <form action="/upload_test" method="POST" enctype="multipart/form-data">
+            <label>Select Test Image:</label>
+            <input type="file" name="test_image" required>
+            <button type="submit">Upload Test Image</button>
+        </form>
+
+        <form action="/get_attendance" method="GET">
+            <button type="submit">Get Attendance</button>
+        </form>
+
+        <div class="download-btn">
+            <a href="/download_excel">Download Attendance Excel</a>
+        </div>
+    </div>
+
+</body>
+</html>
