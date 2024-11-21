@@ -21,8 +21,8 @@ An automated attendance system using computer vision that allows users to upload
 
 ### Clone the Repository
 ```bash
-git clone <repository_url>
-cd <repository_name>
+git clone https://github.com/Sanket4545/Online-Attendace-System-Computer-Vision.git
+cd Online-Attendace-System-Computer-Vision
 ```
 
 ### Install Dependencies
