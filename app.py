@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, send_file, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
 import os
 import cv2
 import numpy as np
@@ -7,25 +7,48 @@ import pandas as pd
 from tabulate import tabulate
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey"  # Required for flash messages
+app.secret_key = "supersecretkey"  # Required for session management
 
-# Set the paths for storing uploaded files
 UPLOAD_FOLDER_TRAIN = './uploads/train/'
 UPLOAD_FOLDER_TEST = './uploads/test/'
-
-# Ensure the folders exist
 os.makedirs(UPLOAD_FOLDER_TRAIN, exist_ok=True)
 os.makedirs(UPLOAD_FOLDER_TEST, exist_ok=True)
 
-known_names = []
-known_name_encodings = []
+USERNAME = "admin"
+PASSWORD = "password"
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
+def home():
+    return render_template('home.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if username == USERNAME and password == PASSWORD:
+            session['user'] = username
+            return redirect(url_for('index'))
+        else:
+            flash('Invalid Credentials', 'danger')
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    flash('Logged out successfully', 'success')
+    return redirect(url_for('home'))
+
+@app.route('/index', methods=['GET', 'POST'])
 def index():
+    if 'user' not in session:
+        return redirect(url_for('login'))
     return render_template('index.html')
 
 @app.route('/upload_train', methods=['POST'])
 def upload_train():
+    if 'user' not in session:
+        return redirect(url_for('login'))
     train_files = request.files.getlist('train_images')
     for file in train_files:
         file.save(os.path.join(UPLOAD_FOLDER_TRAIN, file.filename))
@@ -34,6 +57,8 @@ def upload_train():
 
 @app.route('/upload_test', methods=['POST'])
 def upload_test():
+    if 'user' not in session:
+        return redirect(url_for('login'))
     test_file = request.files['test_image']
     test_file.save(os.path.join(UPLOAD_FOLDER_TEST, test_file.filename))
     flash('Test image uploaded successfully!', 'success')
@@ -162,8 +187,9 @@ def get_attendance():
 
 @app.route('/download_excel', methods=['GET'])
 def download_excel():
+    if 'user' not in session:
+        return redirect(url_for('login'))
     return send_file("attendance.xlsx", as_attachment=True)
-
 
 if __name__ == '__main__':
     app.run(debug=True)

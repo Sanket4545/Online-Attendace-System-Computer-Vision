@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Attendance System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('/static/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 50px;
+        }
+        .btn {
+            padding: 15px 25px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background-color: #218838;
+        }
+        .steps-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            gap: 20px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            width: 300px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: black;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease-in-out forwards;
+        }
+        .card:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+        .card:nth-child(2) {
+            animation-delay: 0.6s;
+        }
+        .card:nth-child(3) {
+            animation-delay: 0.9s;
+        }
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        h3 {
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Online Attendance System</h1>
+        <p>Using AI-powered face recognition to mark attendance seamlessly.</p>
+        <a href="{{ url_for('login') }}" class="btn">Login</a>
+
+        <div class="steps-container">
+            <div class="card">
+                <h3>Step 1</h3>
+                <p>Upload the training images of the students. Ensure that each student has at least one clear image.</p>
+            </div>
+            <div class="card">
+                <h3>Step 2</h3>
+                <p>Upload a test image to detect and recognize students from the training images.</p>
+            </div>
+            <div class="card">
+                <h3>Step 3</h3>
+                <p>Click the "Get Attendance" button to generate the attendance report and download it as an Excel file.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
